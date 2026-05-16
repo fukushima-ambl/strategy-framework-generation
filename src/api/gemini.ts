@@ -1,7 +1,7 @@
 import type { FrameworkId, FrameworkResult } from '../types';
 import { FRAMEWORK_PROMPTS } from '../prompts/frameworkPrompts';
 
-const MODEL = 'gemini-1.5-flash';
+const MODEL = 'gemini-2.0-flash';
 const MAX_RETRIES = 3;
 
 async function sleep(ms: number) {
