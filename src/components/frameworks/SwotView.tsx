@@ -32,7 +32,7 @@ export function SwotView({ data }: SwotViewProps) {
               {q.label}
             </p>
             <ul className="space-y-1">
-              {data[q.key].map((item, i) => (
+              {(data[q.key] ?? []).map((item, i) => (
                 <li
                   key={i}
                   contentEditable
@@ -47,6 +47,7 @@ export function SwotView({ data }: SwotViewProps) {
         ))}
       </div>
 
+      {data.cross_swot && (
       <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
         <h3 className="text-sm font-bold text-gray-700 dark:text-gray-200 mb-3">クロスSWOT戦略</h3>
         <div className="grid grid-cols-2 gap-3">
@@ -64,6 +65,7 @@ export function SwotView({ data }: SwotViewProps) {
           ))}
         </div>
       </div>
+      )}
 
       {data.key_insight && (
         <div className="rounded-xl border border-blue-200 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-800 p-4">
