@@ -43,7 +43,7 @@ export async function generateFramework(
             { role: 'user', parts: [{ text: config.userPromptTemplate(theme) }] },
           ],
           generationConfig: {
-            maxOutputTokens: 2000,
+            maxOutputTokens: 8192,
             temperature: 0.7,
           },
         }),
@@ -84,7 +84,8 @@ export async function generateFramework(
         }
       }
 
-      const jsonMatch = fullText.match(/```json\n([\s\S]*?)\n```/);
+      const jsonMatch = fullText.match(/```json\n([\s\S]*?)\n```/) ||
+                        fullText.match(/```json\n([\s\S]*)/);
       if (!jsonMatch) {
         return {
           framework: frameworkId,
