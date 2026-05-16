@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import type { FrameworkId, GenerationState, ResultCache } from './types';
-import { generateFramework } from './api/anthropic';
+import { generateFramework } from './api/gemini';
 import { Sidebar } from './components/Sidebar';
 import { ThemeInput } from './components/ThemeInput';
 import { FrameworkViewer } from './components/FrameworkViewer';
