@@ -4,6 +4,7 @@ import { ThreeCView } from './frameworks/ThreeCView';
 import { MeceView } from './frameworks/MeceView';
 import { FiveForcesView } from './frameworks/FiveForcesView';
 import { OkrView } from './frameworks/OkrView';
+import { ErrorBoundary } from './ErrorBoundary';
 import type { SwotData, ThreeCData, MeceData, FiveForcesData, OkrData } from '../types';
 
 interface FrameworkViewerProps {
@@ -52,26 +53,41 @@ function renderFramework(fw: FrameworkId, result: FrameworkResult) {
   if (result.rawText) {
     return (
       <div className="rounded-xl border border-orange-200 bg-orange-50 dark:bg-orange-900/20 p-4">
-        <p className="text-sm font-bold text-orange-600 mb-2">JSON形式で取得できませんでした。プレーンテキスト表示：</p>
+        <p className="text-sm font-bold text-orange-600 mb-2">生成結果（テキスト表示）：</p>
         <pre className="text-sm text-gray-700 dark:text-gray-200 whitespace-pre-wrap">{result.rawText}</pre>
       </div>
     );
   }
-  switch (fw) {
-    case 'swot': return <SwotView data={data as SwotData} />;
-    case 'threeC': return <ThreeCView data={data as ThreeCData} />;
-    case 'mece': return <MeceView data={data as MeceData} />;
-    case 'fiveForces': return <FiveForcesView data={data as FiveForcesData} />;
-    case 'okr': return <OkrView data={data as OkrData} />;
-    default:
-      return (
-        <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
-          <pre className="text-sm text-gray-700 dark:text-gray-200 whitespace-pre-wrap">
-            {JSON.stringify(data, null, 2)}
-          </pre>
-        </div>
-      );
+
+  let inner: React.ReactNode;
+  try {
+    switch (fw) {
+      case 'swot': inner = <SwotView data={data as SwotData} />; break;
+      case 'threeC': inner = <ThreeCView data={data as ThreeCData} />; break;
+      case 'mece': inner = <MeceView data={data as MeceData} />; break;
+      case 'fiveForces': inner = <FiveForcesView data={data as FiveForcesData} />; break;
+      case 'okr': inner = <OkrView data={data as OkrData} />; break;
+      default:
+        inner = (
+          <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+            <pre className="text-sm text-gray-700 dark:text-gray-200 whitespace-pre-wrap">
+              {JSON.stringify(data, null, 2)}
+            </pre>
+          </div>
+        );
+    }
+  } catch {
+    inner = (
+      <div className="rounded-xl border border-orange-200 bg-orange-50 dark:bg-orange-900/20 p-4">
+        <p className="text-sm font-bold text-orange-600 mb-2">表示処理でエラーが発生しました。生データ表示：</p>
+        <pre className="text-sm text-gray-700 dark:text-gray-200 whitespace-pre-wrap">
+          {JSON.stringify(data, null, 2)}
+        </pre>
+      </div>
+    );
   }
+
+  return <ErrorBoundary>{inner}</ErrorBoundary>;
 }
 
 export function FrameworkViewer({ selectedFw, state, onRegenerate }: FrameworkViewerProps) {
