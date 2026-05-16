@@ -53,7 +53,7 @@ function exportSwot(pptx: pptxgen, result: FrameworkResult) {
   ];
 
   cells.forEach(cell => {
-    slide.addShape(pptxgen.ShapeType.rect, {
+    slide.addShape('rect', {
       x: cell.x, y: cell.y, w: 4.6, h: 2.1,
       fill: { color: 'FFFFFF' },
       line: { color: 'DDDDDD', width: 0.5 },
@@ -82,7 +82,7 @@ function exportSwot(pptx: pptxgen, result: FrameworkResult) {
       { label: 'WT戦略（弱み×脅威）', text: data.cross_swot.wt, x: 5.1, y: 3.05, color: 'E24B4A' },
     ];
     crossCells.forEach(cell => {
-      csSlide.addShape(pptxgen.ShapeType.rect, {
+      csSlide.addShape('rect', {
         x: cell.x, y: cell.y, w: 4.6, h: 2.1,
         fill: { color: 'FFFFFF' },
         line: { color: 'DDDDDD', width: 0.5 },
@@ -130,7 +130,7 @@ function exportThreeC(pptx: pptxgen, result: FrameworkResult) {
       x: col.x, y: 0.75, w: 3.0, h: 0.35,
       fontSize: 11, bold: true, color: col.color,
     });
-    slide.addShape(pptxgen.ShapeType.rect, {
+    slide.addShape('rect', {
       x: col.x, y: 1.15, w: 3.0, h: 3.8,
       fill: { color: 'FFFFFF' },
       line: { color: 'DDDDDD', width: 0.5 },
