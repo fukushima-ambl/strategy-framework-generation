@@ -1,7 +1,7 @@
 import type { FrameworkId, FrameworkResult } from '../types';
 import { FRAMEWORK_PROMPTS } from '../prompts/frameworkPrompts';
 
-const MODEL = 'gemini-2.0-flash';
+const MODEL = 'gemini-2.5-flash';
 const MAX_RETRIES = 3;
 
 async function sleep(ms: number) {
@@ -49,14 +49,13 @@ export async function generateFramework(
         }),
       });
 
-      if (response.status === 429) {
-        lastError = new Error('APIのレート制限に達しました。しばらく待ってから再試行してください。');
-        continue;
-      }
-
       if (!response.ok) {
         const errBody = await response.text().catch(() => '');
-        lastError = new Error(`APIエラーが発生しました（ステータス: ${response.status}）。${errBody}`);
+        if (response.status === 429) {
+          lastError = new Error(`APIのレート制限に達しました（1分あたり5回・1日20回が上限）。しばらく待ってから再試行してください。詳細: ${errBody}`);
+        } else {
+          lastError = new Error(`APIエラーが発生しました（ステータス: ${response.status}）。${errBody}`);
+        }
         continue;
       }
 
