@@ -18,10 +18,10 @@ export async function generateFramework(
   onChunk: (text: string) => void
 ): Promise<FrameworkResult> {
   const config = FRAMEWORK_PROMPTS[frameworkId];
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  const apiKey = localStorage.getItem('gemini_api_key') || import.meta.env.VITE_GEMINI_API_KEY;
 
-  if (!apiKey || apiKey.includes('ここに')) {
-    throw new Error('APIキーが設定されていません。.env.localファイルにVITE_GEMINI_API_KEYを設定してください。');
+  if (!apiKey) {
+    throw new Error('APIキーが設定されていません。画面上部の「APIキー設定」から登録してください。');
   }
 
   let lastError: Error | null = null;

@@ -5,11 +5,13 @@ import { Sidebar } from './components/Sidebar';
 import { ThemeInput } from './components/ThemeInput';
 import { FrameworkViewer } from './components/FrameworkViewer';
 import { ExportButtons } from './components/ExportButtons';
+import { ApiKeyModal } from './components/ApiKeyModal';
 
 function App() {
   const [theme, setTheme] = useState('');
   const [selectedFw, setSelectedFw] = useState<FrameworkId>('swot');
   const [darkMode, setDarkMode] = useState(false);
+  const [showApiKeyModal, setShowApiKeyModal] = useState(() => !localStorage.getItem('gemini_api_key'));
   const [generationState, setGenerationState] = useState<GenerationState>({
     status: 'idle',
     streamingText: '',
@@ -84,6 +86,9 @@ function App() {
 
   return (
     <div className={darkMode ? 'dark' : ''}>
+      {showApiKeyModal && (
+        <ApiKeyModal onSave={() => setShowApiKeyModal(false)} />
+      )}
       <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden">
         <div className="flex items-center gap-3 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3">
           <ThemeInput
@@ -99,6 +104,13 @@ function App() {
             result={generationState.result}
             theme={theme}
           />
+          <button
+            onClick={() => setShowApiKeyModal(true)}
+            className="shrink-0 px-3 py-2 rounded-lg text-xs border border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            title="APIキーを変更"
+          >
+            🔑 APIキー
+          </button>
         </div>
 
         <div className="flex flex-1 overflow-hidden">
