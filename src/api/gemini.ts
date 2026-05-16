@@ -97,6 +97,16 @@ export async function generateFramework(
       }
 
       const parsed = JSON.parse(jsonMatch[1]);
+
+      // SWOTは cross_swot / key_insight がトップレベルで返るため data にマージする
+      if (frameworkId === 'swot' && parsed.data) {
+        parsed.data = {
+          ...parsed.data,
+          cross_swot: parsed.cross_swot ?? parsed.data.cross_swot,
+          key_insight: parsed.key_insight ?? parsed.data.key_insight,
+        };
+      }
+
       return {
         ...parsed,
         framework: frameworkId,
